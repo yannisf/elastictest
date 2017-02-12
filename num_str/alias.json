@@ -1,0 +1,17 @@
+{
+    "actions": [{
+        "add": {
+            "index": "dict_num_str",
+            "alias": "word_alias_num_str",
+            "filter": {
+                "terms": {
+                    "uuid": [
+"1",
+"2",
+"3",
+...                    ]
+                }
+            }
+        }
+    }]
+}

@@ -1,0 +1,18 @@
+{
+  "query": {
+    "filtered": {
+      "query": {
+        "match_all": {}
+      },
+      "filter": {
+        "terms": {
+          "uuid": [
+1,
+2,
+3,
+...          ]
+        }
+      }
+    }
+  }
+}

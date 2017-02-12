@@ -1,0 +1,20 @@
+{
+  "profile": true,
+  "query": {
+    "filtered": {
+      "query": {
+        "match_all": {}
+      },
+      "filter": {
+        "terms": {
+          "uuid": [
+"e065bd91-1cbc-4ccd-95bc-f7bc39de038d",
+"00a7a05f-493e-4fcf-a8df-c70d012af24e",
+"bee175ae-ae96-4aae-898f-7e513fab1029",
+...
+          ]
+        }
+      }
+    }
+  }
+}

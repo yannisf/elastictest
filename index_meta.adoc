@@ -1,0 +1,133 @@
+== Elasticsearch notes
+
+.Delete index
+----
+DELETE dict
+----
+
+.Create index and settings
+----
+PUT dict
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 4,
+      "number_of_replicas": 1
+    }
+  }
+}
+----
+
+.Create index mapping
+----
+POST dict/_mapping/word
+{
+  "_all": {
+    "enabled": false
+  },
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "index": "not_analyzed",
+      "store": true
+    },
+    "word": {
+      "type": "string",
+      "index": "not_analyzed",
+      "store": true
+    }
+  }
+}
+----
+
+.Create an index and its mapping in the same time
+----
+PUT dict
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 4,
+      "number_of_replicas": 1
+    }
+  },
+  "mappings": {
+    "word": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "index": "not_analyzed",
+          "store": true
+        },
+        "word": {
+          "type": "string",
+          "index": "not_analyzed",
+          "store": true
+        }
+      }
+    }
+  }
+}
+----
+
+.Insert a document in the index
+----
+POST dict/word
+{
+  "uuid": "0e1799d9-4d20-4fe4-bdec-f1069082482e",
+  "word": "Athens"
+}
+----
+
+.Bulk insert documents in the index
+----
+POST _bulk
+{ "index" : { "_index" : "dict", "_type" : "word" } }
+{ "uuid" : "0e1799d9-4d20-4fe4-bdec-f1069082482e", "word": "Athens"}
+{ "index" : { "_index" : "dict", "_type" : "word" } }
+{ "uuid" : "6913f9c6-a0ff-4785-bef1-f5f78dfb076b", "word": "Thessaloniki"}
+----
+
+.Bulk insert documents in the index using defaults form url
+----
+POST dict/word/_bulk
+{ "index" : { } }
+{ "uuid" : "0e1799d9-4d20-4fe4-bdec-f1069082482e", "word": "Athens"}
+{ "index" : { } }
+{ "uuid" : "6913f9c6-a0ff-4785-bef1-f5f78dfb076b", "word": "Thessaloniki"}
+----
+
+.A simple search
+----
+GET dict/_search
+----
+
+==== Define the alias
+----
+curl -X POST http://localhost:9200/_aliases -d @alias.json
+----
+
+==== Search index using term query (term_query.json)
+----
+curl -X POST http://localhost:9200/dict/_search -d @term_query.json 
+----  
+  -> too_many_clauses: maxClauseCount is set to 1024
+
+==== Search index using filtered match_all (filtered_match_all.json)
+----
+curl -X POST http://localhost:9200/dict/_search -d @filtered_match_all.json
+----
+
+==== Search using the index (match_all.json)
+----
+curl -X POST http://localhost:9200/dict/_search?pretty -d @match_all.json -> FAST
+----
+
+==== Search using the alias (match_all.json)
+----
+curl -X POST http://localhost:9200/word_alias/_search?pretty -d @match_all.json -> SLOW
+----
+
+
